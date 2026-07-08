@@ -1,0 +1,102 @@
+[
+  {
+    "id": "duck-debug-01",
+    "name": "Breakpoint Buddy Duck",
+    "category": "Debugging",
+    "price": 14.99,
+    "tagline": "Stares at your stack trace so you don't have to.",
+    "description": "A calm companion for stepping through tangled code paths and suspicious assumptions.",
+    "personalityTraits": ["patient", "analytical", "focused"],
+    "stock": 12
+  },
+  {
+    "id": "duck-debug-02",
+    "name": "Null Pointer Sentinel",
+    "category": "Debugging",
+    "price": 16.5,
+    "tagline": "Guards your code from void-related drama.",
+    "description": "Keeps a vigilant beak on nullable values and missing checks in critical logic.",
+    "personalityTraits": ["vigilant", "direct", "protective"],
+    "stock": 8
+  },
+  {
+    "id": "duck-philo-01",
+    "name": "Socratic Squeaker",
+    "category": "Philosopher",
+    "price": 19,
+    "tagline": "Answers every question with a better question.",
+    "description": "Ideal for design reviews where certainty is suspicious and assumptions need sunlight.",
+    "personalityTraits": ["curious", "reflective", "witty"],
+    "stock": 9
+  },
+  {
+    "id": "duck-philo-02",
+    "name": "Existential Quacker",
+    "category": "Philosopher",
+    "price": 21.75,
+    "tagline": "What is a bug, really?",
+    "description": "Prompts late-night contemplation about system boundaries, meaning, and side effects.",
+    "personalityTraits": ["introspective", "calm", "enigmatic"],
+    "stock": 5
+  },
+  {
+    "id": "duck-mari-01",
+    "name": "Captain Quackbeard",
+    "category": "Maritime",
+    "price": 18.25,
+    "tagline": "Steers your sprint through stormy seas.",
+    "description": "A seasoned captain duck for teams navigating deadlines, regressions, and rogue requirements.",
+    "personalityTraits": ["bold", "steady", "resourceful"],
+    "stock": 11
+  },
+  {
+    "id": "duck-mari-02",
+    "name": "Harbor Master Duck",
+    "category": "Maritime",
+    "price": 17,
+    "tagline": "Dock your features safely before release.",
+    "description": "Ensures every release enters harbor with logs reviewed and checklists complete.",
+    "personalityTraits": ["organized", "practical", "reliable"],
+    "stock": 7
+  },
+  {
+    "id": "duck-well-01",
+    "name": "Zen Floatie",
+    "category": "Wellness",
+    "price": 15.5,
+    "tagline": "Inhale confidence, exhale flaky tests.",
+    "description": "Brings tranquil energy to tense debug sessions and pre-demo moments.",
+    "personalityTraits": ["calm", "empathetic", "grounded"],
+    "stock": 14
+  },
+  {
+    "id": "duck-well-02",
+    "name": "Mindful Merge Duck",
+    "category": "Wellness",
+    "price": 13.99,
+    "tagline": "Merge conflict? Take one mindful quack.",
+    "description": "Encourages slow breathing and small, reversible commits during integration stress.",
+    "personalityTraits": ["gentle", "supportive", "methodical"],
+    "stock": 10
+  },
+  {
+    "id": "duck-ltd-01",
+    "name": "Nevermore Noir Duck",
+    "category": "Limited Edition",
+    "price": 29.99,
+    "tagline": "Quoth the duck: ship once, ship right.",
+    "description": "A dramatic collector's duck for gothic code reviews and poetic commit messages.",
+    "personalityTraits": ["dramatic", "artistic", "intense"],
+    "stock": 3
+  },
+  {
+    "id": "duck-ltd-02",
+    "name": "Moonlight Monocle Duck",
+    "category": "Limited Edition",
+    "price": 27.5,
+    "tagline": "Elegance for your most refined refactors.",
+    "description": "A distinguished duck that demands clean abstractions and tasteful naming.",
+    "personalityTraits": ["elegant", "precise", "opinionated"],
+    "stock": 4
+  }
+]
