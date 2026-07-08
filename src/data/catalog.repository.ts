@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 import { isDuck, type Duck } from "../domain/duck.js";
@@ -43,5 +43,61 @@ export class CatalogRepository {
     }
 
     return parsed;
+  }
+
+  /**
+   * Atomically decrement stock for multiple ducks.
+   * Validates that all requested decrements are possible before writing.
+   * Returns true on success, false if any line conflicts (insufficient stock).
+   * On conflict, no stock is modified.
+   *
+   * @param decrements - Array of { duckId, quantity } to decrement
+   * @returns true if all decrements applied, false if any conflict
+   */
+  async decrementStockAtomic(
+    decrements: Array<{ duckId: string; quantity: number }>
+  ): Promise<boolean> {
+    // Validate quantities are positive
+    for (const decrement of decrements) {
+      if (decrement.quantity <= 0) {
+        throw new CatalogRepositoryError(
+          "INVALID_DATA",
+          `Invalid decrement quantity: ${decrement.quantity} (must be positive)`
+        );
+      }
+    }
+
+    // Read current state
+    const allDucks = await this.getAllDucks();
+
+    // Build a map for quick lookup
+    const duckMap = new Map<string, Duck>(allDucks.map((d) => [d.id, d]));
+
+    // Validate all decrements are possible (all-or-nothing check)
+    for (const decrement of decrements) {
+      const duck = duckMap.get(decrement.duckId);
+      if (!duck) {
+        throw new CatalogRepositoryError("INVALID_DATA", `Duck not found: ${decrement.duckId}`);
+      }
+      if (duck.stock < decrement.quantity) {
+        // Conflict: insufficient stock
+        return false;
+      }
+    }
+
+    // Apply all decrements
+    for (const decrement of decrements) {
+      const duck = duckMap.get(decrement.duckId);
+      if (duck) {
+        duck.stock -= decrement.quantity;
+      }
+    }
+
+    // Write updated ducks back to file
+    const updatedDucks = Array.from(duckMap.values());
+    const content = JSON.stringify(updatedDucks, null, 2);
+    await writeFile(this.catalogFilePath, content, "utf-8");
+
+    return true;
   }
 }
