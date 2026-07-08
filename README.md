@@ -40,3 +40,14 @@ Originally inspired by the excellent [GitHub Copilot HoL by @Philess](https://mo
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+## Advanced feature endpoints (stories 06–09)
+
+The project now includes additional endpoints for curator tools and customer engagement:
+
+- `POST /admin/ducks` — curator-only duck creation (requires `x-admin-password` matching `ADMIN_PASSWORD`)
+- `GET /ducks/featured` — deterministic Duck of the Day
+- `POST /quiz/result` — deterministic personality quiz recommendation
+- `GET /` — static no-build web frontend shell
+
+See [specs/001-curator-quiz-frontend/contracts/advanced-features.openapi.yaml](specs/001-curator-quiz-frontend/contracts/advanced-features.openapi.yaml) for request/response details.

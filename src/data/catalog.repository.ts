@@ -45,6 +45,24 @@ export class CatalogRepository {
     return parsed;
   }
 
+  async findByNameNormalized(name: string): Promise<Duck | undefined> {
+    const ducks = await this.getAllDucks();
+    const normalized = normalizeName(name);
+    return ducks.find((duck) => normalizeName(duck.name) === normalized);
+  }
+
+  async addDuck(duck: Duck): Promise<void> {
+    const allDucks = await this.getAllDucks();
+    const duplicate = allDucks.some((candidate) => normalizeName(candidate.name) === normalizeName(duck.name));
+
+    if (duplicate) {
+      throw new CatalogRepositoryError("INVALID_DATA", "Catalog already contains a duck with the same name.");
+    }
+
+    allDucks.push(duck);
+    await this.writeAllDucks(allDucks);
+  }
+
   /**
    * Atomically decrement stock for multiple ducks.
    * Validates that all requested decrements are possible before writing.
@@ -95,9 +113,17 @@ export class CatalogRepository {
 
     // Write updated ducks back to file
     const updatedDucks = Array.from(duckMap.values());
-    const content = JSON.stringify(updatedDucks, null, 2);
-    await writeFile(this.catalogFilePath, content, "utf-8");
+    await this.writeAllDucks(updatedDucks);
 
     return true;
   }
+
+  private async writeAllDucks(ducks: Duck[]): Promise<void> {
+    const content = JSON.stringify(ducks, null, 2);
+    await writeFile(this.catalogFilePath, content, "utf-8");
+  }
+}
+
+function normalizeName(name: string): string {
+  return name.trim().toLowerCase();
 }

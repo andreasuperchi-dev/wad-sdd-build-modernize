@@ -243,4 +243,64 @@ describe("CatalogRepository", () => {
         code: "INVALID_DATA",
       });
     });
-  });});
+  });
+
+  describe("duck creation helpers", () => {
+    it("finds duck by normalized name", async () => {
+      const dir = await makeTempDir();
+      const ducks = [
+        {
+          id: "duck-1",
+          name: "Lucky Duck",
+          category: "Debugging",
+          price: 25.99,
+          tagline: "Brings good luck",
+          description: "A lucky duck",
+          personalityTraits: ["lucky"],
+          stock: 10,
+        },
+      ];
+      const filePath = join(dir, "catalog.json");
+      await writeFile(filePath, JSON.stringify(ducks, null, 2), "utf-8");
+
+      const repository = new CatalogRepository(filePath);
+      const found = await repository.findByNameNormalized("  lucky duck  ");
+
+      expect(found?.id).toBe("duck-1");
+    });
+
+    it("adds a new duck when no duplicate name exists", async () => {
+      const dir = await makeTempDir();
+      const ducks = [
+        {
+          id: "duck-1",
+          name: "Lucky Duck",
+          category: "Debugging",
+          price: 25.99,
+          tagline: "Brings good luck",
+          description: "A lucky duck",
+          personalityTraits: ["lucky"],
+          stock: 10,
+        },
+      ];
+      const filePath = join(dir, "catalog.json");
+      await writeFile(filePath, JSON.stringify(ducks, null, 2), "utf-8");
+
+      const repository = new CatalogRepository(filePath);
+      await repository.addDuck({
+        id: "duck-2",
+        name: "Curated Duck",
+        category: "Adventurer",
+        price: 12,
+        tagline: "New duck",
+        description: "A new duck",
+        personalityTraits: ["bold"],
+        stock: 3,
+      });
+
+      const updated = await repository.getAllDucks();
+      expect(updated).toHaveLength(2);
+      expect(updated.some((duck) => duck.name === "Curated Duck")).toBe(true);
+    });
+  });
+});

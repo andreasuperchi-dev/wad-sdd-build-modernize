@@ -135,9 +135,7 @@ export class CheckoutService {
     await this.deps.ordersRepository.appendOrder(order);
 
     // 5e. Clear cart
-    this.deps.cartStore.removeItem(sessionId, sessionId); // This removes the entire session cart
-    // Actually, we need to clear all items from the cart, not remove the session
-    // Let me fix: iterate through and remove each item
+    // Clear all line items from the session cart
     for (const duckId of cart.items.keys()) {
       this.deps.cartStore.removeItem(sessionId, duckId);
     }

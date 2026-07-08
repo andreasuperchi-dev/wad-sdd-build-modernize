@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "smoke": "tsx -e \"import { createApp } from './src/http/app.ts'; const app = createApp(); console.log('smoke:ok', Boolean(app));\""
   },
   "keywords": [],
   "author": "",

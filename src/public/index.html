@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Duck Emporium</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <header class="header">
+      <div class="header-inner">
+        <div>
+          <p class="eyebrow">WELCOME TO</p>
+          <h1>🦆 Duck Emporium</h1>
+          <p class="subtitle">Browse, quiz, and checkout without curl.</p>
+        </div>
+        <button id="open-cart-modal" type="button" class="cart-button" aria-label="Open cart">
+          Cart
+        </button>
+      </div>
+    </header>
+
+    <main id="main-content" class="layout home-layout" tabindex="-1">
+      <section class="panel featured-panel" id="featured-section">
+        <h2>Duck of the Day</h2>
+        <div id="featured-content" class="content-block">Loading featured duck...</div>
+      </section>
+
+      <section class="panel" id="catalog-section">
+        <h2>Catalog</h2>
+        <p class="panel-help">Search by text, filter by category, and narrow by price.</p>
+        <form id="filters" class="filters">
+          <label class="sr-only" for="query">Search ducks</label>
+          <input id="query" type="search" placeholder="Search ducks by name, category, or tagline" />
+          <label class="sr-only" for="category">Filter by category</label>
+          <select id="category">
+            <option value="">All categories</option>
+          </select>
+          <div class="price-range">
+            <label class="sr-only" for="min-price">Minimum price</label>
+            <input id="min-price" type="number" min="0" step="0.01" placeholder="Min €" />
+            <label class="sr-only" for="max-price">Maximum price</label>
+            <input id="max-price" type="number" min="0" step="0.01" placeholder="Max €" />
+          </div>
+        </form>
+        <div id="catalog-list" class="cards"></div>
+      </section>
+
+      <section class="panel" id="quiz-section">
+        <h2>Which duck are you?</h2>
+        <p class="panel-help">Answer all 5 questions to get your deterministic duck match.</p>
+        <form id="quiz-form" class="stacked-form">
+          <label for="quiz-q1">Q1 — Your ideal Saturday involves:
+            <select id="quiz-q1" name="q1" required>
+              <option value="">Pick one</option>
+              <option value="A">Solving a complex puzzle or reading deeply</option>
+              <option value="B">Exploring somewhere new</option>
+              <option value="C">Sharing a long meal with loved ones</option>
+              <option value="D">Making everyone laugh</option>
+              <option value="E">Taking a quiet walk with no destination</option>
+            </select>
+          </label>
+          <label for="quiz-q2">Q2 — In a group project, you naturally become:
+            <select id="quiz-q2" name="q2" required>
+              <option value="">Pick one</option>
+              <option value="A">The one asking “but why?”</option>
+              <option value="B">The one who starts immediately</option>
+              <option value="C">The one keeping the team together</option>
+              <option value="D">The one lifting everyone's mood</option>
+              <option value="E">The one calming tension</option>
+            </select>
+          </label>
+          <label for="quiz-q3">Q3 — Your social media feed is mostly:
+            <select id="quiz-q3" name="q3" required>
+              <option value="">Pick one</option>
+              <option value="A">Long-form ideas and thought-provoking threads</option>
+              <option value="B">Travel and adventure snapshots</option>
+              <option value="C">Heartfelt moments and friendships</option>
+              <option value="D">Memes and funny videos</option>
+              <option value="E">Minimal, slow-living content</option>
+            </select>
+          </label>
+          <label for="quiz-q4">Q4 — When choosing a gift, you:
+            <select id="quiz-q4" name="q4" required>
+              <option value="">Pick one</option>
+              <option value="A">Choose something that makes them think</option>
+              <option value="B">Prefer gifting an experience</option>
+              <option value="C">Personalize it with care</option>
+              <option value="D">Pick what makes them laugh</option>
+              <option value="E">Choose simple but meaningful</option>
+            </select>
+          </label>
+          <label for="quiz-q5">Q5 — Your rainy afternoon looks like:
+            <select id="quiz-q5" name="q5" required>
+              <option value="">Pick one</option>
+              <option value="A">Re-reading a favorite book</option>
+              <option value="B">Planning your next adventure</option>
+              <option value="C">Calling someone you care about</option>
+              <option value="D">Watching stand-up or comedy</option>
+              <option value="E">Doing absolutely nothing, mindfully</option>
+            </select>
+          </label>
+          <button type="submit">Get Recommendation</button>
+        </form>
+        <div id="quiz-result" class="content-block" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <dialog id="cart-modal" class="cart-modal" aria-labelledby="cart-modal-title">
+      <article class="panel modal-panel">
+        <div class="modal-header">
+          <h2 id="cart-modal-title">Your Cart</h2>
+          <button id="close-cart-modal" type="button" class="ghost-button" aria-label="Close cart">Close</button>
+        </div>
+
+        <section id="cart-modal-view" class="modal-view is-active">
+          <div id="cart-content" class="content-block">Loading cart...</div>
+          <div class="modal-actions">
+            <button id="proceed-checkout" type="button">Proceed to Checkout</button>
+          </div>
+        </section>
+
+        <section id="checkout-modal-view" class="modal-view">
+          <p class="panel-help">Mocked payment only. No real card processing.</p>
+          <form id="checkout-form" class="stacked-form">
+            <label for="shipping-name">
+              Shipping name
+              <input id="shipping-name" name="shippingName" placeholder="Quincy Quacker" required />
+            </label>
+            <label for="checkout-email">
+              Email
+              <input id="checkout-email" name="email" type="email" placeholder="quincy@example.com" required />
+            </label>
+            <label for="checkout-address">
+              Address
+              <textarea id="checkout-address" name="address" placeholder="42 Quack Street, Duckburg" required></textarea>
+            </label>
+            <label for="checkout-card">
+              Mocked card number
+              <input id="checkout-card" name="cardNumber" placeholder="4242 4242 4242 4242" required />
+            </label>
+            <div class="modal-actions">
+              <button id="back-to-cart" type="button" class="ghost-button">Back to Cart</button>
+              <button type="submit">Place Order</button>
+            </div>
+          </form>
+          <div id="checkout-result" class="content-block" aria-live="polite"></div>
+        </section>
+      </article>
+    </dialog>
+
+    <dialog id="detail-modal" class="detail-modal" aria-labelledby="detail-modal-title">
+      <article class="panel modal-panel">
+        <div class="modal-header">
+          <h2 id="detail-modal-title">Duck Detail</h2>
+          <button id="close-detail-modal" type="button" class="ghost-button" aria-label="Close duck details">Close</button>
+        </div>
+        <div id="detail-content" class="content-block">Select a duck from Home to see details.</div>
+      </article>
+    </dialog>
+
+    <div id="global-error" class="error" role="alert" aria-live="assertive"></div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
