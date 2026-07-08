@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { isCatalogItem, isDuck, type Duck } from "./duck.js";
+import { isCatalogItem, isDuck, type Duck, type DuckDetailResult } from "./duck.js";
 
 describe("isDuck", () => {
   it("returns true for a valid duck payload", () => {
@@ -50,5 +50,28 @@ describe("isCatalogItem", () => {
   it("returns false for non-object values", () => {
     expect(isCatalogItem(null)).toBe(false);
     expect(isCatalogItem("duck")).toBe(false);
+  });
+});
+
+describe("Duck detail contracts", () => {
+  it("supports a success detail payload shape", () => {
+    const detailResult: DuckDetailResult = {
+      duck: {
+        id: "duck-detail-1",
+        name: "Detail Duck",
+        category: "Debugging",
+        price: 25,
+        tagline: "All details, no surprises.",
+        description: "A duck with full story and personality.",
+        personalityTraits: ["clear", "helpful"],
+        stockStatus: "In stock",
+      },
+    };
+
+    if (!("duck" in detailResult)) {
+      throw new Error("Expected duck detail result");
+    }
+
+    expect(detailResult.duck.stockStatus).toBe("In stock");
   });
 });

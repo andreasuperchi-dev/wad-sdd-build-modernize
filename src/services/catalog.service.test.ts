@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { EMPTY_CATALOG_MESSAGE, CatalogService, type DuckSource } from "./catalog.service.js";
+import { DUCK_NOT_FOUND_ERROR, EMPTY_CATALOG_MESSAGE, CatalogService, type DuckSource } from "./catalog.service.js";
 import { type Duck } from "../domain/duck.js";
 
 function createDuck(overrides: Partial<Duck> = {}): Duck {
@@ -106,5 +106,88 @@ describe("CatalogService", () => {
       items: [],
       message: EMPTY_CATALOG_MESSAGE,
     });
+  });
+
+  it("returns full detail payload for a valid duck ID", async () => {
+    const source = makeSource([
+      createDuck({
+        id: "detail-1",
+        name: "Inspector Duck",
+        category: "Debugging",
+        price: 23,
+        tagline: "Shows every clue.",
+        description: "A meticulous duck for deep investigation.",
+        personalityTraits: ["meticulous", "curious"],
+        stock: 5,
+      }),
+    ]);
+
+    const service = new CatalogService(source);
+    const result = await service.getDuckDetailById("detail-1");
+
+    expect(result).toEqual({
+      duck: {
+        id: "detail-1",
+        name: "Inspector Duck",
+        category: "Debugging",
+        price: 23,
+        tagline: "Shows every clue.",
+        description: "A meticulous duck for deep investigation.",
+        personalityTraits: ["meticulous", "curious"],
+        stockStatus: "In stock",
+      },
+    });
+  });
+
+  it("maps stock status deterministically for 0, 1, 2, and 3+", async () => {
+    const source = makeSource([
+      createDuck({ id: "sold-out", stock: 0 }),
+      createDuck({ id: "low-1", stock: 1 }),
+      createDuck({ id: "low-2", stock: 2 }),
+      createDuck({ id: "in-stock", stock: 3 }),
+    ]);
+
+    const service = new CatalogService(source);
+
+    const soldOut = await service.getDuckDetailById("sold-out");
+    const low1 = await service.getDuckDetailById("low-1");
+    const low2 = await service.getDuckDetailById("low-2");
+    const inStock = await service.getDuckDetailById("in-stock");
+
+    if (!("duck" in soldOut) || !("duck" in low1) || !("duck" in low2) || !("duck" in inStock)) {
+      throw new Error("Expected detail result for all known IDs");
+    }
+
+    expect(soldOut.duck.stockStatus).toBe("Sold out");
+    expect(low1.duck.stockStatus).toBe("Only 1 left");
+    expect(low2.duck.stockStatus).toBe("Only 2 left");
+    expect(inStock.duck.stockStatus).toBe("In stock");
+  });
+
+  it("returns not-found result for unknown IDs", async () => {
+    const source = makeSource([createDuck({ id: "known-id", stock: 2 })]);
+    const service = new CatalogService(source);
+
+    const result = await service.getDuckDetailById("missing-id");
+
+    expect(result).toEqual({ error: DUCK_NOT_FOUND_ERROR });
+  });
+
+  it("supports detail lookup using an ID sourced from catalog results", async () => {
+    const source = makeSource([
+      createDuck({ id: "catalog-id-1", stock: 4, name: "Catalog Anchor" }),
+      createDuck({ id: "catalog-id-2", stock: 1, name: "Follow-up Duck" }),
+    ]);
+
+    const service = new CatalogService(source);
+    const catalog = await service.getAvailableCatalogItems();
+    const detail = await service.getDuckDetailById(catalog.items[0]?.id ?? "");
+
+    if (!("duck" in detail)) {
+      throw new Error("Expected detail result for catalog ID");
+    }
+
+    expect(detail.duck.id).toBe("catalog-id-1");
+    expect(detail.duck.name).toBe("Catalog Anchor");
   });
 });

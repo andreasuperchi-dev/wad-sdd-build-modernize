@@ -11,6 +11,17 @@ export type Duck = {
 
 export type CatalogItem = Pick<Duck, "id" | "name" | "category" | "price" | "tagline">;
 
+export type StockStatus = "Sold out" | "In stock" | `Only ${number} left`;
+
+export type DuckDetailItem = Pick<
+  Duck,
+  "id" | "name" | "category" | "price" | "tagline" | "description" | "personalityTraits"
+> & {
+  stockStatus: StockStatus;
+};
+
+export type DuckDetailResult = { duck: DuckDetailItem } | { error: "Duck not found" };
+
 export type EmptyCatalogResult = {
   items: [];
   message: string;
